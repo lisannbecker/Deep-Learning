@@ -230,7 +230,7 @@ class ZeroshotCLIP(nn.Module):
             similarity_logits = F.cosine_similarity(normalized_img_features.unsqueeze(1), self.text_features.to(self.device).unsqueeze(0), dim=-1)
             
             #   You need to multiply the similarity logits with the logit scale (clip_model.logit_scale).
-            similarity_logits *= self.clip_model.logit_scale.to(self.device)  # Move logit_scale to the same device as the image and text features
+            similarity_logits *= self.clip_model.logit_scale.to(img_features.device)  # Move logit_scale to the same device as the image and text features
 
         # - Return logits of shape (batch size, number of classes).
         return similarity_logits
