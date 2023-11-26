@@ -169,18 +169,14 @@ class ZeroshotCLIP(nn.Module):
 
         # Steps:
         # - Tokenize each text prompt using CLIP's tokenizer.
-        tokenized_text = clip.tokenize(prompts)
+        tokenized_text = clip.tokenize(prompts).to(device)  # Ensure tokenized_text is on the correct device
 
         # - Compute the text features (encodings) for each prompt.
-        with torch.no_grad(): #XXX
+        with torch.no_grad():
             text_features = clip_model.encode_text(tokenized_text)
 
-            #print(f'Shape text features: {text_features.size()}')
-
             # - Normalize the text features.
-            normalized_text_features = (text_features - text_features.mean()) / text_features.std() #zscore
-            #print(normalized_text_features)
-            #print(f'Normalized text features:\n{normalized_text_features}\n Shape: {normalized_text_features.size()}')
+            normalized_text_features = (text_features - text_features.mean()) / text_features.std()
 
         # - Return a tensor of shape (num_prompts, 512).
         return normalized_text_features
@@ -230,7 +226,7 @@ class ZeroshotCLIP(nn.Module):
             similarity_logits = F.cosine_similarity(normalized_img_features.unsqueeze(1), self.text_features.to(self.device).unsqueeze(0), dim=-1)
             
             #   You need to multiply the similarity logits with the logit scale (clip_model.logit_scale).
-            similarity_logits *= self.clip_model.logit_scale.to(img_features.device)  # Move logit_scale to the same device as the image and text features
+            similarity_logits *= self.clip_model.logit_scale.to(self.device) # Move logit_scale to the same device as the image and text features
 
         # - Return logits of shape (batch size, number of classes).
         return similarity_logits
