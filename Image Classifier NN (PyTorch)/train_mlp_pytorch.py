@@ -230,7 +230,7 @@ def train(hidden_dims, lr, use_batch_norm, batch_size, epochs, seed, data_dir):
         torch.backends.cudnn.benchmark = False
 
     # Set default device
-    device = torch.device('mps' if torch.cuda.is_available() else 'cpu')    
+    device = torch.device('mps' if torch.backends.mps.is_available() else 'cpu')    
     print(f"Training on {device}")
 
     # Loading the dataset
