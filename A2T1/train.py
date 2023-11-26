@@ -125,8 +125,8 @@ def train_model(model, lr, batch_size, epochs, data_dir, checkpoint_name, device
         for i, batch in enumerate(train_loader): 
 
             data, true_labels = batch
-            #(data.shape) 
-            #data, true_labels = data.to(device), true_labels.to(device)
+            (data.shape) 
+            data, true_labels = data.to(device), true_labels.to(device)
 
             #run model on input data / forward pass
             predictions = model(data)
