@@ -221,25 +221,16 @@ class ZeroshotCLIP(nn.Module):
         #print(f'\nShape batch: {image.size()}Batch:\n{image}')
         
         with torch.no_grad():
-            #print('entered no_grad')
-
-            img_features = self.clip_model.encode_image(image) #on batch
-            #print(f'\nShape image features: {img_features.size()}')
-
-
+            img_features = self.clip_model.encode_image(image.to(self.device))  # Move image to the same device as the text features
+            
             # - Normalize the image features.
-            normalized_img_features = (img_features - img_features.mean()) / img_features.std() #zscore
-
-            #print(f'\nNormalized image features:\n{normalized_img_features}\n Shape: {normalized_img_features.size()}')
-            #print(f'Text features shape: {self.text_features.size()}\nText features:\n{self.text_features}')
-
+            normalized_img_features = (img_features - img_features.mean()) / img_features.std()  # zscore
 
             # - Compute similarity logits between the image features and the text features.
-            similarity_logits = F.cosine_similarity(normalized_img_features.unsqueeze(1), self.text_features.unsqueeze(0), dim=-1) #XXX could be wrong
-            #similarity_logits = self.clip_model(normalized_img_features, self.text_features)
-
+            similarity_logits = F.cosine_similarity(normalized_img_features.unsqueeze(1), self.text_features.to(self.device).unsqueeze(0), dim=-1)
+            
             #   You need to multiply the similarity logits with the logit scale (clip_model.logit_scale).
-            similarity_logits *= self.clip_model.logit_scale
+            similarity_logits *= self.clip_model.logit_scale.to(self.device)  # Move logit_scale to the same device as the image and text features
 
         # - Return logits of shape (batch size, number of classes).
         return similarity_logits
@@ -429,7 +420,6 @@ def main():
         _, predicted_labels = torch.max(preds_batch.data, 1)
         
         total_preds += true_labels.shape[0]
-        correct_preds += (predicted_labels == true_labels).sum().item()
         print(f"Batch {i + 1}/{len(loader)}")
 
     accuracy = correct_preds / total_preds
