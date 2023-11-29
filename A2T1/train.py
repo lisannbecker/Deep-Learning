@@ -124,9 +124,6 @@ def train_model(model, lr, batch_size, epochs, data_dir, checkpoint_name, device
     for ep in range(epochs):
         for i, batch in enumerate(train_loader): 
 
-            if i == 5:
-                break
-
             data, true_labels = batch
             #(data.shape) 
             data, true_labels = data.to(device), true_labels.to(device)
@@ -191,8 +188,6 @@ def evaluate_model(model, data_loader, device):
         for i, (data, true_labels) in enumerate(data_loader):
             data, true_labels = data.to(device), true_labels.to(device)
 
-            if i ==5:
-                break
             #if data.size(0) < data_loader.batch_size:
             #    continue
 
