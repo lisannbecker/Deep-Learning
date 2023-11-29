@@ -171,7 +171,7 @@ class ZeroshotCLIP(nn.Module):
         tokenized_text = clip.tokenize(prompts).to(device)
 
         # - Compute the text features (encodings) for each prompt.
-        with torch.no_grad(): #XXX
+        with torch.no_grad(): 
             text_features = clip_model.encode_text(tokenized_text.to(device))
 
             print(f'Shape text features: {text_features.size()}')
