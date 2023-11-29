@@ -124,9 +124,12 @@ def train_model(model, lr, batch_size, epochs, data_dir, checkpoint_name, device
     for ep in range(epochs):
         for i, batch in enumerate(train_loader): 
 
+            if i == 5:
+                break
+
             data, true_labels = batch
-            (data.shape) 
-            data, true_labels = data.to(device), true_labels.to(device)
+            #(data.shape) 
+            #data, true_labels = data.to(device), true_labels.to(device)
 
             #run model on input data / forward pass
             predictions = model(data)
@@ -141,6 +144,7 @@ def train_model(model, lr, batch_size, epochs, data_dir, checkpoint_name, device
             
             print(f"Epoch [{ep+1}] Training Batch [{i + 1} / {len(train_loader)}]")
         
+        print('VALIDATION ACCURACY')
         validation_accuracy = evaluate_model(model, val_loader, device)
         val_accuracies.append(validation_accuracy)
 
@@ -153,7 +157,6 @@ def train_model(model, lr, batch_size, epochs, data_dir, checkpoint_name, device
 
     #Save model
     state_dict = model.state_dict()
-    print(state_dict)
     torch.save(state_dict, f"{checkpoint_name}-imagenet_cifar100.tar")
 
     #######################
@@ -188,6 +191,8 @@ def evaluate_model(model, data_loader, device):
         for i, (data, true_labels) in enumerate(data_loader):
             data, true_labels = data.to(device), true_labels.to(device)
 
+            if i ==5:
+                break
             #if data.size(0) < data_loader.batch_size:
             #    continue
 
@@ -199,13 +204,13 @@ def evaluate_model(model, data_loader, device):
 
             print(f"Evaluation Batch [{i + 1} / {len(data_loader)}]")
 
+    
     accuracy = correct_preds / total_preds
-    print(f"Accuracy of the model: {100.0*accuracy:.3f}%")
+    print(f"Accuracy of the model: {accuracy:.3f}")
 
     #######################
     # END OF YOUR CODE    #
     #######################
-
     return accuracy
 
 
@@ -242,10 +247,12 @@ def main(lr, batch_size, epochs, data_dir, seed, augmentation_name, test_noise):
     model = train_model(model, lr, batch_size, epochs, data_dir, checkpoint_name, device, augmentation_name=None) #augmentation_name = 'GaussianNoise'
 
     # Evaluate the model on the test set
+    
     test_dataset = get_test_set(data_dir, test_noise)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
+    print('TEST SET')
     test_accuracy = evaluate_model(model, test_loader, device) #run best model (highest validation accuracy) on test set
-    print(test_accuracy)
+    print(f'Test accuracy: {test_accuracy}')
 
     #######################
     # END OF YOUR CODE    #
