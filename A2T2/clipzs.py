@@ -174,12 +174,8 @@ class ZeroshotCLIP(nn.Module):
         with torch.no_grad(): 
             text_features = clip_model.encode_text(tokenized_text.to(device))
 
-            print(f'Shape text features: {text_features.size()}')
-
             # - Normalize the text features.
             normalized_text_features = (text_features - text_features.mean()) / text_features.std() #zscore
-            #print(normalized_text_features)
-            #print(f'Normalized text features:\n{normalized_text_features}\n Shape: {normalized_text_features.size()}')
 
         # - Return a tensor of shape (num_prompts, 512).
         return normalized_text_features
@@ -217,14 +213,9 @@ class ZeroshotCLIP(nn.Module):
 
         # Steps:
         # - Compute the image features (encodings) using the CLIP model.
-        #print(f'\nShape batch: {image.size()}Batch:\n{image}')
         
         with torch.no_grad():
-            #print('entered no_grad')
-
             img_features = self.clip_model.encode_image(image) #on batch
-            #print(f'\nShape image features: {img_features.size()}')
-
 
             # - Normalize the image features.
             normalized_img_features = (img_features - img_features.mean()) / img_features.std() #zscore
@@ -407,7 +398,7 @@ def main():
         
         total_preds += true_labels.shape[0]
         correct_preds += (predicted_labels == true_labels).sum().item()
-        print(f"Batch {i + 1}/{len(loader)}")
+        #print(f"Batch {i + 1}/{len(loader)}")
 
     accuracy = correct_preds / total_preds
     # - Update the accuracy meter

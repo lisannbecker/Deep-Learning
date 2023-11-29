@@ -89,7 +89,6 @@ class Learner:
         enabled = set()
         for name, param in self.clip.named_parameters():
             if param.requires_grad:
-                #print(f'XX Name: {name}  Parameter:\n{param}')
                 enabled.add(name)
 
         print(f"Parameters to be updated: {enabled}")
@@ -217,8 +216,6 @@ class Learner:
         print('TRAINING SET')
         for i, (images, target) in enumerate(tqdm(self.train_loader)):
 
-            if i > 4:
-                break
             # Measure data loading time
             data_time.update(time.time() - end)
 
@@ -234,31 +231,23 @@ class Learner:
 
             # Steps ( your usual training loop :) ): #scaler XXX?
             # - Set the gradients to zero
-            #try:
             self.optimizer.zero_grad()
-            #except:
-                #print('zero grad didnt work')
 
             # - Move the images/targets to the device
             images, target = images.to(self.device), target.to(self.device)
-            #print('entered training')
             
             # - Perform a forward pass (using self.clip)
             output = self.clip(images)
 
             # - Compute the loss (using self.criterion)
             loss = self.criterion(output, target)
-            #print('loss calculated')
-            #loss = Variable(loss, requires_grad = True)
 
             # - Perform a backward pass
             #self.scaler.scale(loss).backward()
             loss.backward(retain_graph=True)
 
-            #print('backpropagation of loss')
             # - Update the parameters
             self.optimizer.step()
-            #print('optimizer done')
 
             #######################
             # END OF YOUR CODE    #
@@ -316,8 +305,6 @@ class Learner:
                 #######################
                 # PUT YOUR CODE HERE  #
                 #######################
-                if i ==5:
-                    break
 
                 # TODO: Implement the evaluation step for a single batch
 
