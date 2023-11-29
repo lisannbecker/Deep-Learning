@@ -64,7 +64,7 @@ class DeepPromptCLIP(nn.Module):
         # Instructions:
         # - Given a list of prompts, compute the text features for each prompt.
 
-        text_features = clip_model.encode_text(prompts) #prompts were already tokenized
+        text_features = clip_model.encode_text(prompts.to(args.device)) #prompts were already tokenized
         text_features = (text_features - text_features.mean()) / text_features.std() 
 
         # - Return a tensor of shape (num_prompts, 512).
