@@ -238,6 +238,7 @@ def main(lr, batch_size, epochs, data_dir, seed, augmentation_name, test_noise):
 
     # Load the model
     model = get_model(num_classes=100)
+    model = model.to(device)
 
     # Get the augmentation to use
     train_augmentation = 'test_noise'
