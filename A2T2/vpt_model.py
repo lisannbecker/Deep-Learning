@@ -83,7 +83,7 @@ class VisualPromptCLIP(nn.Module):
         # - Given a list of prompts, compute the text features for each prompt.
         tokenized_text = clip.tokenize(prompts)
 
-        text_features = clip_model.encode_text(tokenized_text)
+        text_features = clip_model.encode_text(tokenized_text.to(args.device))
         text_features = (text_features - text_features.mean()) / text_features.std() 
 
         # - Return a tensor of shape (num_prompts, 512).
