@@ -122,6 +122,8 @@ def train_model(model, lr, batch_size, epochs, data_dir, checkpoint_name, device
     model.train()
 
     for ep in range(epochs):
+        print(f"Epoch [{ep+1}]")
+
         for i, batch in enumerate(train_loader): 
 
             data, true_labels = batch
@@ -138,8 +140,7 @@ def train_model(model, lr, batch_size, epochs, data_dir, checkpoint_name, device
             optimizer.zero_grad() #reset gradients per batch
             loss.backward() #compute gradient of the loss by passing it through the network in reverse order
             optimizer.step() #update parameters (weights and bias)
-            
-            print(f"Epoch [{ep+1}] Training Batch [{i + 1} / {len(train_loader)}]")
+        
         
         print('VALIDATION ACCURACY')
         validation_accuracy = evaluate_model(model, val_loader, device)
@@ -184,6 +185,7 @@ def evaluate_model(model, data_loader, device):
     # Loop over the dataset and compute the accuracy. Return the accuracy
     # Remember to use torch.no_grad().
     correct_preds, total_preds = 0.,0.
+    print('EVALUATION')
     with torch.no_grad():
         for i, (data, true_labels) in enumerate(data_loader):
             data, true_labels = data.to(device), true_labels.to(device)
@@ -196,8 +198,6 @@ def evaluate_model(model, data_loader, device):
 
             total_preds += true_labels.shape[0]
             correct_preds += (predicted_labels == true_labels).sum().item()
-
-            print(f"Evaluation Batch [{i + 1} / {len(data_loader)}]")
 
     
     accuracy = correct_preds / total_preds
