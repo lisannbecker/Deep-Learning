@@ -168,7 +168,7 @@ class ZeroshotCLIP(nn.Module):
 
         # Steps:
         # - Tokenize each text prompt using CLIP's tokenizer.
-        tokenized_text = clip.tokenize(prompts)
+        tokenized_text = clip.tokenize(prompts).to(device)
 
         # - Compute the text features (encodings) for each prompt.
         with torch.no_grad(): #XXX
