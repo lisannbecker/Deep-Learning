@@ -58,11 +58,9 @@ class FixedPatchPrompter(nn.Module):
 
         # Hints:
         # - First define the prompt. 
-        batch_size = len(x)
-        prompt = self.patch.repeat(batch_size, 1, 1, 1) #replicate patch along batch dimension - everything else unchanged
 
         # Then add it to the batch of images
-        x[:, :, :self.patch.size(2), :self.patch.size(3)] += prompt #select top-left portion of each image (size of the patch) and add the patch
+        x[:, :, :self.patch.size(2), :self.patch.size(3)] += self.patch #select top-left portion of each image (size of the patch) and add the patch
 
         # - It is always advisable to implement and then visualize if
         #   your prompter does what you expect it to do.
@@ -110,17 +108,12 @@ class PadPrompter(nn.Module):
 
         # Hints:
         # - First define the prompt. Then add it to the batch of images.
-        batch_size = len(x)
-        prompt_up = self.pad_up.repeat(batch_size, 1, 1, 1) 
-        prompt_down = self.pad_down.repeat(batch_size, 1, 1, 1) 
-        prompt_left = self.pad_left.repeat(batch_size, 1, 1, 1) 
-        prompt_right = self.pad_right.repeat(batch_size, 1, 1, 1)
 
-        x[:, :, :prompt_up.size(2), :] += prompt_up #batch, channels, height, width
-        x[:, :, -prompt_down.size(2):, :] += prompt_down #third dim = height starts from the bottom and moves upwards
+        x[:, :, :self.pad_up.size(2), :] += self.pad_up #batch, channels, height, width
+        x[:, :, -self.pad_down.size(2):, :] += self.pad_down #third dim = height starts from the bottom and moves upwards
 
-        x[:, :, prompt_up.size(2):-prompt_down.size(2), :prompt_left.size(3)] += prompt_left #prompt should start at height: 0 + height of pad_up; width:0 and have the dimensions specified above
-        x[:, :, prompt_up.size(2):-prompt_down.size(2), -prompt_right.size(3):] += prompt_right #prompt should start at height: 0 + height of pad_up; width: image width - pad_size of pad_right
+        x[:, :, self.pad_up.size(2):-self.pad_down.size(2), :self.pad_left.size(3)] += self.pad_left #prompt should start at height: 0 + height of pad_up; width:0 and have the dimensions specified above
+        x[:, :, self.pad_up.size(2):-self.pad_down.size.size(2), -self.pad_right.size(3):] += self.pad_right #prompt should start at height: 0 + height of pad_up; width: image width - pad_size of pad_right
 
 
         # - It is always advisable to implement and then visualize if
