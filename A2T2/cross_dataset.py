@@ -268,7 +268,7 @@ def main():
         # END OF YOUR CODE    #
         #######################
 
-        print(f"TOP1 Accuracy on cifra10 + cifar100 is: {accuracy_all}")
+        print(f"TOP1 Accuracy on cifar10 + cifar100 is: {accuracy_all}")
         exit()
     else:
         raise ValueError("Enable flag --evaluate!")
