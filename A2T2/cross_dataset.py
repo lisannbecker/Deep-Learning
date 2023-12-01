@@ -205,10 +205,10 @@ def main():
         # TODO: Compute the text features (for each of the prompts defined above) using CLIP
         # Note: This is similar to the code you wrote in `clipzs.py`
         
-        tokenized_text = clip.tokenize(prompts)#.to(args.device)
+        tokenized_text = clip.tokenize(prompts).to(args.device)#.to(args.device) 
 
         with torch.no_grad(): 
-            text_features = clip_model.encode_text(tokenized_text)
+            text_features = clip_model.encode_text(tokenized_text.to(args.device))
 
             text_features = (text_features - text_features.mean()) / text_features.std() #zscore
         #######################
