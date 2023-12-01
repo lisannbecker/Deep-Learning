@@ -104,7 +104,7 @@ def train_model(model, lr, batch_size, epochs, data_dir, checkpoint_name, device
     # Load the datasets
     train_dataset, val_dataset = get_train_validation_set(data_dir, validation_size=5000, augmentation_name=None)
     #train_dataset object is a Subset object, and when you iterate over it, you get individual samples instead of batches
-    train_loader, val_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True), DataLoader(val_dataset, batch_size=batch_size, shuffle=True) #XXX
+    train_loader, val_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True), DataLoader(val_dataset, batch_size=batch_size, shuffle=True) 
 
     print("Number of batches:", len(train_loader))
 
@@ -127,7 +127,6 @@ def train_model(model, lr, batch_size, epochs, data_dir, checkpoint_name, device
         for i, batch in enumerate(train_loader): 
 
             data, true_labels = batch
-            #(data.shape) 
             data, true_labels = data.to(device), true_labels.to(device)
 
             #run model on input data / forward pass
@@ -190,9 +189,6 @@ def evaluate_model(model, data_loader, device):
         for i, (data, true_labels) in enumerate(data_loader):
             data, true_labels = data.to(device), true_labels.to(device)
 
-            #if data.size(0) < data_loader.batch_size:
-            #    continue
-
             preds_batch = model(data) #foward pass, validation set
             _, predicted_labels = torch.max(preds_batch.data, 1) #get class with highest probability
 
@@ -240,7 +236,7 @@ def main(lr, batch_size, epochs, data_dir, seed, augmentation_name, test_noise):
 
     # Train the model
     checkpoint_name = 'best_model'
-    model = train_model(model, lr, batch_size, epochs, data_dir, checkpoint_name, device, augmentation_name=None) #augmentation_name = 'GaussianNoise'
+    model = train_model(model, lr, batch_size, epochs, data_dir, checkpoint_name, device, augmentation_name=GaussianNoise) #augmentation_name = 'GaussianNoise'
 
     # Evaluate the model on the test set
     
