@@ -60,7 +60,7 @@ class FixedPatchPrompter(nn.Module):
         # - First define the prompt. 
 
         # Then add it to the batch of images
-        x[:, :, :self.patch.size(2), :self.patch.size(3)] += self.patch #select top-left portion of each image (size of the patch) and add the patch
+        x[:, :, :self.patch.shape[2], :self.patch.shape[3]] += self.patch #select top-left portion of each image (size of the patch) and add the patch
 
         # - It is always advisable to implement and then visualize if
         #   your prompter does what you expect it to do.
@@ -109,11 +109,11 @@ class PadPrompter(nn.Module):
         # Hints:
         # - First define the prompt. Then add it to the batch of images.
 
-        x[:, :, :self.pad_up.size(2), :] += self.pad_up #batch, channels, height, width
-        x[:, :, -self.pad_down.size(2):, :] += self.pad_down #third dim = height starts from the bottom and moves upwards
+        x[:, :, :self.pad_up.shape[2], :] += self.pad_up #batch, channels, height, width
+        x[:, :, -self.pad_down.shape[2]:, :] += self.pad_down #third dim = height starts from the bottom and moves upwards
 
-        x[:, :, self.pad_up.size(2):-self.pad_down.size(2), :self.pad_left.size(3)] += self.pad_left #prompt should start at height: 0 + height of pad_up; width:0 and have the dimensions specified above
-        x[:, :, self.pad_up.size(2):-self.pad_down.size.size(2), -self.pad_right.size(3):] += self.pad_right #prompt should start at height: 0 + height of pad_up; width: image width - pad_size of pad_right
+        x[:, :, self.pad_up.shape[2]:-self.pad_down.shape[2], :self.pad_left.shape[3]] += self.pad_left #prompt should start at height: 0 + height of pad_up; width:0 and have the dimensions specified above
+        x[:, :, self.pad_up.shape[2]:-self.pad_down.size.shape[2], -self.pad_right.shape[3]:] += self.pad_right #prompt should start at height: 0 + height of pad_up; width: image width - pad_size of pad_right
 
 
         # - It is always advisable to implement and then visualize if
