@@ -113,7 +113,7 @@ class PadPrompter(nn.Module):
         x[:, :, -self.pad_down.shape[2]:, :] += self.pad_down #third dim = height starts from the bottom and moves upwards
 
         x[:, :, self.pad_up.shape[2]:-self.pad_down.shape[2], :self.pad_left.shape[3]] += self.pad_left #prompt should start at height: 0 + height of pad_up; width:0 and have the dimensions specified above
-        x[:, :, self.pad_up.shape[2]:-self.pad_down.size.shape[2], -self.pad_right.shape[3]:] += self.pad_right #prompt should start at height: 0 + height of pad_up; width: image width - pad_size of pad_right
+        x[:, :, self.pad_up.shape[2]:-self.pad_down.shape[2], -self.pad_right.shape[3]:] += self.pad_right #prompt should start at height: 0 + height of pad_up; width: image width - pad_size of pad_right
 
 
         # - It is always advisable to implement and then visualize if
