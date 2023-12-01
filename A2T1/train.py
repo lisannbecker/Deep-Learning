@@ -236,7 +236,7 @@ def main(lr, batch_size, epochs, data_dir, seed, augmentation_name, test_noise):
 
     # Train the model
     checkpoint_name = 'best_model'
-    model = train_model(model, lr, batch_size, epochs, data_dir, checkpoint_name, device, augmentation_name=GaussianNoise) #augmentation_name = 'GaussianNoise'
+    model = train_model(model, lr, batch_size, epochs, data_dir, checkpoint_name, device, augmentation_name=train_augmentation) #augmentation_name = 'GaussianNoise'
 
     # Evaluate the model on the test set
     
